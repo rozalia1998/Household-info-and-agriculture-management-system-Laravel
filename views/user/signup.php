@@ -33,15 +33,12 @@
     <form method="POST">
         <label for="name"><b>Name</b></label>
         <input type="text" placeholder="Enter Your Name" name="name" required><br><br>
-        <span class="error"><?php if (isset($nameError)) echo $nameError ?></span><br>
 
         <label for="email"><b>Email</b></label>
-        <input type="text" placeholder="Enter Email" name="email" required><br><br>
-        <span class="error"><?php if (isset($emailError)) echo $emailError ?></span><br>
+        <input type="email" placeholder="Enter Email" name="email" required><br><br>
 
         <label for="pass"><b>Password</b></label>
-        <input type="text" placeholder="Enter Password" name="pass" required><br><br>
-        <span class="error"><?php if (isset($passwordError)) echo $passwordError ?></span><br>
+        <input type="password" placeholder="Enter Password" name="pass" required><br><br>
 
         <button type="submit" id="signup" name="submit">Sign Up</button>
     </form>

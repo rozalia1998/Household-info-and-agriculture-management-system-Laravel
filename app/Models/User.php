@@ -1,6 +1,7 @@
 <?php
 namespace App\Model;
-require_once 'Model.php';
+
+require_once __DIR__ .  '/Model.php';
 
 class User extends Model{
    private $name,$email,$password,$type;
@@ -37,25 +38,28 @@ class User extends Model{
        return $this->type;
    }
 
-   public static function getAllUsers($conn){
-        $qry="SELECT * FROM users WHERE type='user' OR type='employee'";
-        $stmt=mysqli_query($conn,$qry);
+   public function getAllUsers(){
+        $results=$this->all('users');
         $users=array();
-        while($row=mysqli_fetch_assoc($stmt)){
-            $user=new User();
-            $user->id=$row['id'];
-            $user->setName($row['name']);
-            $user->setEmail($row['email']);
-            $user->setPass($row['password']);
-            $user->setType($row['type']);
-            $users[]=$user;
+        foreach($results as $result){
+            if($result['type'] !== 'Admin'){
+                $user = new User();
+                $user->id=$result['id'];
+                $user->setName($result['name']);
+                $user->setEmail($result['email']);
+                $user->setType($result['type']);
+                $user->setPass($result['password']);
+                $users[] = $user;
+            }
         }
         return $users;
-   }
+        
+    }
 
-   public static function getUserById($conn,$id){
+
+   public function getUserById($id){
         $qry="SELECT * FROM users WHERE id=$id";
-        $stmt=mysqli_query($conn,$qry);
+        $stmt=mysqli_query($this->conn,$qry);
         $row=mysqli_fetch_assoc($stmt);
         $user=new User();
         $user->id = $row['id'];
@@ -67,29 +71,29 @@ class User extends Model{
 
    }
 
-   public function save($conn){
+   public function save(){
     if($this->id){
         $qry="UPDATE users SET type='$this->type' WHERE id='$this->id'";
-        $stmt=mysqli_query($conn,$qry);
+        $stmt=mysqli_query($this->conn,$qry);
     }
     else{
         $qry1="SELECT * FROM users WHERE email='$this->email'";
-        $stmt1=mysqli_query($conn,$qry1);
+        $stmt1=mysqli_query($this->conn,$qry1);
         if(mysqli_num_rows($stmt1)==0){
             $qry="INSERT INTO users(name,email,password,type) VALUES ('$this->name','$this->email','$this->password','user')";
-            $stmt=mysqli_query($conn,$qry);
+            $stmt=mysqli_query($this->conn,$qry);
             }
         }
    }
 
-   public function delete($conn){
+   public function delete(){
         $qry="DELETE FROM users WHERE id='$this->id'";
-        $stmt=mysqli_query($conn,$qry);
+        $stmt=mysqli_query($this->conn,$qry);
    }
 
-   public function login($conn){
+   public function login(){
     $qry="SELECT * FROM users WHERE email='$this->email' AND password='$this->password'";
-    $stmt=mysqli_query($conn,$qry);
+    $stmt=mysqli_query($this->conn,$qry);
     $res=mysqli_fetch_assoc($stmt);
     if($res){
         session_start();

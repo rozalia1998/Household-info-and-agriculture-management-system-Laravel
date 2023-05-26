@@ -4,34 +4,37 @@ require_once 'BaseController.php';
 require_once __DIR__ . '/../Models/Family.php';
 use App\Model\Family;
 class FamilyController extends BaseController{
+    private $familyobj;
+    public function __construct(){
+        $this->familyobj=new Family();
+    }
     public function index(){
-        $families=Family::getAllFamilies($this->conn);
-        require __DIR__ . '/../../views/family/index.php';
+        $families=$this->familyobj->getAllFamilies();
+        $this->render('family/index',compact('families'));
     }
 
     public function create(){
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
-            $family=new Family();
-            $family->setFName($_POST['fname']);
-            $family->setPName($_POST['pname']);
-            $family->setLName($_POST['lname']);
-            $family->setCount($_POST['num']);
-            $family->setPhone($_POST['phone']);
-            $family->setState($_POST['state']);
-            $family->setArea($_POST['area']);
-            $family->save($this->conn);
+            $this->familyobj->setFName($_POST['fname']);
+            $this->familyobj->setPName($_POST['pname']);
+            $this->familyobj->setLName($_POST['lname']);
+            $this->familyobj->setCount($_POST['num']);
+            $this->familyobj->setPhone($_POST['phone']);
+            $this->familyobj->setState($_POST['state']);
+            $this->familyobj->setArea($_POST['area']);
+            $this->familyobj->save();
             header('Location: /Darrebni/new/Show');
             exit;
         }
         else{
-            require 'views/family/create.php';
+            $this->render('family/create');
         }
     }
 
     public function edit(){
         if(isset($_POST['edit'])){
             $id=$_POST['id'];
-            $family=Family::getFamilyById($this->conn,$id);
+            $family=$this->familyobj->getFamilyById($id);
             $family->setFName($_POST['fname']);
             $family->setPName($_POST['pname']);
             $family->setLName($_POST['lname']);
@@ -39,22 +42,22 @@ class FamilyController extends BaseController{
             $family->setPhone($_POST['phone']);
             $family->setState($_POST['state']);
             $family->setArea($_POST['area']);
-            $family->save($this->conn);
+            $family->save();
             header('Location: /Darrebni/new/Show');
             exit;
         }
         else{
             $id=$_GET['id'];
-            $family=Family::getFamilyById($this->conn,$id);
-            require __DIR__ . '/../../views/family/edit.php';
+            $family=$this->familyobj->getFamilyById($id);
+            $this->render('family/edit',compact('family'));
         }
     }
 
     public function delete(){
         if(isset($_POST['yes'])){
             $id=$_POST['id'];
-            $family = Family::getFamilyById($this->conn, $id);
-            $family->delete($this->conn);
+            $family = $this->familyobj->getFamilyById($id);
+            $family->delete();
             header('Location: /Darrebni/new/Show');
             exit;
         }
@@ -64,26 +67,29 @@ class FamilyController extends BaseController{
         }
         else{
             $id=$_GET['id'];
-            $family = Family::getFamilyById($this->conn, $id);
-            require 'views/family/delete.php';
+            $family = $this->familyobj->getFamilyById($id);
+            $this->render('family/delete',compact('family'));
+            
         }
     }
 
     public function search(){
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
             $area=$_POST['search'];
-            $families = Family::search($this->conn, $area);
+            $families = $this->familyobj->search($area);
              if(!empty($families)){
-                 require 'views/family/search.php';
+                $this->render('family/search',compact('families'));
              }
              else{
-                 header('Location: /Darrebni/new/Show/search');
+                 header('Location: /Darrebni/new/Show');
                 exit;
              }
             
         }
          else{
-            require 'views/family/search.php';
+            $this->render('family/search');
         }
+        
     }
+    
 }

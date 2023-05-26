@@ -5,86 +5,72 @@ require_once __DIR__ . '/../Models/User.php';
 use App\Model\User;
 
 class UserController extends BaseController{
+    private $userobj;
+
+    public function __construct(){
+        $this->userobj=new User();
+    }
     public function index(){
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $user = new User();
-            $emailError=$this->filterEmail($this->validate($_POST['email']));
-            $passwordError=$this->filterPass($this->validate($_POST['pass']));
-            if(empty($emailError) && empty($passwordError)){
-
-            $user->setEmail($this->validate($_POST['email']));
-            $user->setPass($this->validate($_POST['pass']));
-            $res=$user->login($this->conn);
+            $this->userobj->setEmail($this->validate($_POST['email']));
+            $this->userobj->setPass($this->validate($_POST['pass']));
+            $res=$this->userobj->login();
             if($res){
                 if($_SESSION['user-type']=='Admin'){
                     header('Location: /Darrebni/new/Dashboard');
                     exit;
+                    
                 }
                 else{
                     header('Location: /Darrebni/new/Show');
                     exit;
                 }
             }
-        }
-        else{
-
-            require 'views/user/login.php';
-        }
         } else {
-            
-            require 'views/user/login.php';
+            $this->render('user/login');
         }
     }
 
     public function register(){
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
-            $user=new User();
-            $nameError=$this->filterName($this->validate($_POST['name']));
-            $emailError=$this->filterEmail($this->validate($_POST['email']));
-            $passwordError=$this->filterPass($this->validate($_POST['pass']));
-            if(empty($nameError) && empty($emailError) && empty($passwordError)){
-                $user->setName($this->validate($_POST['name']));
-                $user->setEmail($this->validate($_POST['email']));
-                $user->setPass($this->validate($_POST['pass']));
-                $user->save($this->conn);
-                header('Location: /Darrebni/new/');
-                exit;
+            $this->userobj->setName($this->validate($_POST['name']));
+            $this->userobj->setEmail($this->validate($_POST['email']));
+            $this->userobj->setPass($this->validate($_POST['pass']));
+            $this->userobj->save();
+            header('Location: /Darrebni/new/');
+            exit;
             }
             else{
-                require 'views/user/signup.php';
+                $this->render('user/signup');
             }
         }
-        else{
-            require 'views/user/signup.php';
-        }
-    }
 
     public function dashboard(){
-        $users=User::getAllUsers($this->conn);
-        require __DIR__ . '/../../views/user/dashboard.php';
+        $users=$this->userobj->getAllUsers();
+        $this->render('user/dashboard',compact('users'));
     }
 
     public function edit(){
         if(isset($_POST['check'])){
             $id = $_POST['id'];
-            $user = User::getUserById($this->conn, $id);
+            $user = $this->userobj->getUserById($id);
             $user->setType($_POST['check']);
-            $user->save($this->conn);
+            $user->save();
             header('Location: /Darrebni/new/Dashboard');
             exit;
         }
         else{
             $id=$_GET['id'];
-            $user = User::getUserById($this->conn, $id);
-            require 'views/user/edit.php';
+            $user = $this->userobj->getUserById($id);
+            $this->render('user/edit',compact('user'));
         }
     }
 
     public function delete(){
         if(isset($_POST['yes'])){
             $id=$_POST['id'];
-            $user = User::getUserById($this->conn, $id);
-            $user->delete($this->conn);
+            $user = $this->userobj->getUserById($id);
+            $user->delete();
             header('Location: /Darrebni/new/Dashboard');
             exit;
         }
@@ -94,14 +80,13 @@ class UserController extends BaseController{
         }
         else{
             $id=$_GET['id'];
-            $user = User::getUserById($this->conn, $id);
-            require 'views/user/delete.php';
+            $user = $this->userobj->getUserById($id);
+            $this->render('user/delete',compact('user'));
         }
     }
 
     public function logout(){
-        $user=new User();
-        $user->Signout();
+        $this->userobj->Signout();
         header('location: /Darrebni/new/');
         exit;
     }

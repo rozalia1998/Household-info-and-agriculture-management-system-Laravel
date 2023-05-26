@@ -5,8 +5,26 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        label{
+            display:inline-block;
+            width:200px;
+            font-size:20px;
+        }
+        input:not([type='radio']){
+            width:300px;
+        }
+        input{
+            margin-bottom:10px;
+        }
+        #edit{
+            color:white;
+            font-size:18px;
+            background-color:#04AA6D;
+        }
+    </style>
 </head>
-<body>
+<body>  
     <h1>Edit Family</h1>
     <form method="Post">
         <div>
@@ -43,9 +61,10 @@
                 <option value="ُEastern-countryside">Eastern countryside</option>
                 <option value="Western-countryside">Western countryside</option>
             </select>
-        </div>
+        </div></br>
         <input type="hidden" name="id" value="<?= $family->getId() ?>">
-        <button type='submit' name='edit'>Edit</button>
+        <button type='submit' id='edit' name='edit'>Edit</button>
     </form>
+    
 </body>
 </html>

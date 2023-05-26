@@ -38,7 +38,7 @@
         <label for="pass"><b>Password</b></label>
         <input type="password" placeholder="Enter Password" name="pass" required><br><br>
 
-        <a href="http://localhost/Darrebni/new/Signup">Sign Up</a>
+        <a href="<?= BASE_PATH.'Signup'?>">Sign Up</a>
         <button type="submit" name="login" id="log" class="signin">Login</button>
 </form>
 </center>
