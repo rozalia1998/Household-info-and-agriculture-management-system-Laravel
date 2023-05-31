@@ -19,12 +19,22 @@ abstract class Model{
         return $this->id;
     }
 
+    // public function all($table){
+    //     $qry="SELECT * FROM $table";
+    //     $stmt=mysqli_query($this->conn,$qry);
+    //     $results=array();
+    //     while($row=mysqli_fetch_assoc($stmt)){
+    //         $results[]=$row;
+    //     }
+    //     return $results;
+    // }
+
     public function all($table){
         $qry="SELECT * FROM $table";
         $stmt=mysqli_query($this->conn,$qry);
         $results=array();
-        while($row=mysqli_fetch_assoc($stmt)){
-            $results[]=$row;
+        while($obj=mysqli_fetch_object($stmt)){
+            $results[]=$obj;
         }
         return $results;
     }

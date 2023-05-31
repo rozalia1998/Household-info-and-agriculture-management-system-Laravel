@@ -1,10 +1,11 @@
 <?php
 require_once __DIR__ . '/app/Controllers/UserController.php';
 require_once __DIR__ . '/app/Controllers/FamilyController.php';
+require_once __DIR__ . '/app/Controllers/PlantController.php';
 define('BASE_PATH', '/Darrebni/new/');
 use App\Controller\UserController;
 use App\Controller\FamilyController;
-
+use App\Controller\PlantController;
 $action=$_SERVER['REQUEST_URI'];
 switch($action){
     case BASE_PATH:
@@ -49,6 +50,26 @@ switch($action){
         break;
     case BASE_PATH.'Show/search' :
         $con=new FamilyController();
+        $con->search();
+        break;
+    case BASE_PATH.'plant/show':
+        $con=new PlantController();
+        $con->index();
+        break;
+    case strpos($action, BASE_PATH . 'plant/create') === 0 :
+        $con=new PlantController();
+        $con->create();
+        break;
+    case strpos($action, BASE_PATH . 'plant/edit/') === 0 :
+        $con=new PlantController();
+        $con->edit();
+        break;
+    case strpos($action, BASE_PATH . 'plant/delete/') === 0 :
+        $con=new PlantController();
+        $con->delete();
+        break;
+    case BASE_PATH.'plant/search' :
+        $con=new PlantController();
         $con->search();
         break;
     default:

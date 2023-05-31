@@ -68,7 +68,9 @@
     <?php endforeach?>
         </tbody>
     </table><br>
-    <a href="/Darrebni/task/?action=logout">Logout</a>
+    <button>
+            <a id='search' href="<?= BASE_PATH.'logout'?>">Logout</a>
+    </button>
     </center>
 </body>
 </html>

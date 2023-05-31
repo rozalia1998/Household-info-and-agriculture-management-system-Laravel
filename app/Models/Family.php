@@ -91,14 +91,14 @@ class Family extends Model{
         $families=array();
         foreach($results as $result){
             $family = new Family();
-            $family->id=$result['id'];
-            $family->setFName($result['fname']);
-            $family->setPName($result['pname']);
-            $family->setLName($result['lname']);
-            $family->setCount($result['num_of_members']);
-            $family->setPhone($result['phone']);
-            $family->setState($result['state']);
-            $family->setArea($result['area']);
+            $family->id=$result->id;
+            $family->setFName($result->fname);
+            $family->setPName($result->pname);
+            $family->setLName($result->lname);
+            $family->setCount($result->num_of_members);
+            $family->setPhone($result->phone);
+            $family->setState($result->state);
+            $family->setArea($result->area);
             $families[] = $family;
             
         }

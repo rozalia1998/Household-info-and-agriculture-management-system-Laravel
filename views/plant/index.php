@@ -4,15 +4,6 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
-</head>
-<body>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
         table{
@@ -49,66 +40,60 @@
     </style>
 </head>
 <body>
-    <center>
-    
+<center>
         <button>
-            <a id='search' href="<?= BASE_PATH.'Show/search'?>">Search</a>
+            <a id='search' href="<?= BASE_PATH.'plant/search'?>">Search</a>
         </button>
-        <h1>All Families</h1>
-        <?php 
-        session_start();
-        if ($_SESSION['user-type']=='employee') :?>
-            <a id='create' href="<?= BASE_PATH.'Show/create' ?>">Create Family</a><br><br>
+        
+        <h1>All Farms</h1>
                    
-        <?php endif?>
-        <a id='show' href="<?= BASE_PATH.'plant/show' ?>">Show Plants</a>
+        
+        
         <table>
             <thead>
             <tr>
                 <th cols="3">Full Name</th>
-                <th>Num of members</th>
-                <th>Phone</th>
-                <th>State</th>
-                <th>Area</th>
+                <th>Plants Type</th>
+                <th>Product Quantity (In Tons)</th>
+                <th>Annual (In Million)</th>
                 <?php
+                session_start();
                 if ($_SESSION['user-type']=='employee') :?>
                 <th cols="2">Actions</th>
                 <?php endif?>
             </tr>
             </thead>
             <tbody>
-            <?php foreach ($families as $family):?>
+                <?php foreach ($objects as $obj):?>
                 <tr>
-                    <td cols="3"><?= $family->getFName() ?> <?= $family->getPName() ?> <?= $family->getLName() ?></td>
-                    <td><?= $family->getCount() ?></td>
-                    <td><?= $family->getPhone() ?></td>
-                    <td><?= $family->getState() ?></td>
-                    <td><?= $family->getArea() ?></td>
+                    <td cols="3"><?= $obj->fname?> <?= $obj->pname ?> <?= $obj->lname ?></td>
+                    <td><?= $obj->plants_type ?></td>
+                    <td><?= $obj->product_quantity ?></td>
+                    <td><?= $obj->annual ?></td>
                     <?php
                     if ($_SESSION['user-type']=='employee') :?>
                     <td cols="2">
                         <button id="edit">
-                            <a href="<?= BASE_PATH.'Show/edit/?id='.$family->getId() ?>">Edit</a>
+                            <a href="<?= BASE_PATH.'plant/edit/?id='.$obj->id ?>">Edit</a>
                         </button>
                         <button id="delete">
-                            <a href="<?= BASE_PATH.'Show/delete/?id='.$family->getId() ?>">Delete</a>
-                        </button>
-                        <button id="create">
-                            <a href="<?= BASE_PATH.'plant/create/?fid='.$family->getId() ?>">create plant</a>
+                            <a href="<?= BASE_PATH.'plant/delete/?id='.$obj->id ?>">Delete</a>
                         </button>
                     </td>
                     <?php endif ?>
 
                 </tr>
+            
             <?php endforeach ?>
             </tbody>
         </table>
         <button>
             <a id='search' href="<?= BASE_PATH.'logout'?>">Logout</a>
         </button>
-    </center>   
-</body>
-</html>
-
+        <button>
+        <a id='search' href="<?= BASE_PATH.'Show'?>">Go Back</a>
+        </button>
+        
+    </center>  
 </body>
 </html>

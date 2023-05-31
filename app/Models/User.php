@@ -42,18 +42,17 @@ class User extends Model{
         $results=$this->all('users');
         $users=array();
         foreach($results as $result){
-            if($result['type'] !== 'Admin'){
+            if($result->type !== 'Admin'){
                 $user = new User();
-                $user->id=$result['id'];
-                $user->setName($result['name']);
-                $user->setEmail($result['email']);
-                $user->setType($result['type']);
-                $user->setPass($result['password']);
+                $user->id=$result->id;
+                $user->setName($result->name);
+                $user->setEmail($result->email);
+                $user->setType($result->type);
+                $user->setPass($result->password);
                 $users[] = $user;
             }
         }
         return $users;
-        
     }
 
 
